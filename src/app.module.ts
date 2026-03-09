@@ -1,10 +1,22 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { UsersController } from './users/users.controller';
+import { UsersService } from './users/users.service';
+import { TransactionsService } from './transactions/transactions.service';
+import { TransactionsController } from './transactions/transactions.controller';
+import postgres from 'postgres';
 
 @Module({
   imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [UsersController, TransactionsController],
+  providers: [
+    {
+      provide: 'SQL',
+      useValue: postgres(
+        process.env.PG_CONNECTION ?? `postgres://root:root@localhost:5432/test`,
+      ),
+    },
+    UsersService,
+    TransactionsService,
+  ],
 })
 export class AppModule {}

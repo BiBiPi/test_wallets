@@ -1,0 +1,32 @@
+import { Inject, Injectable } from '@nestjs/common';
+import postgres from 'postgres';
+
+@Injectable()
+export class UsersService {
+  constructor(@Inject('SQL') private readonly sql: postgres.Sql) {}
+
+  async getAll() {
+    return await this.sql`SELECT * FROM users`;
+  }
+
+  async get(user_id: number) {
+    return await this.sql`SELECT * FROM users WHERE id = ${user_id}`;
+  }
+
+  async create() {
+    return await this.sql`INSERT INTO users(balance) VALUES (0) RETURNING *`;
+  }
+
+  async deposit(user_id: number, amount: number) {
+    return await this.sql.begin(async () => {
+      await this
+        .sql`INSERT INTO transactions(user_id, action, amount, ts) VALUES (${user_id}, 'UP', ${amount}, NOW())`;
+
+      const [{ total_balance }] = await this
+        .sql`SELECT SUM(amount) as total_balance FROM transactions WHERE user_id = ${user_id}`;
+
+      return await this
+        .sql`UPDATE users SET balance = ${total_balance} WHERE id = ${user_id} RETURNING *`;
+    });
+  }
+}
