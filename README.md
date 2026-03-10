@@ -59,11 +59,3 @@ curl localhost:3000/users/create -X PUT
 
 curl localhost:3000/transactions/all
 ```
-
-```sql
-INSERT INTO users (balance)
-SELECT 0 FROM generate_series(1, 1000000);
-
-INSERT INTO transactions (user_id, action, amount, ts)
-SELECT 1, 'UP', 1, NOW() FROM generate_series(1, 1000000);
-```
