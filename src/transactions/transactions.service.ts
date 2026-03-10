@@ -12,7 +12,7 @@ export class TransactionsService {
   async buy(user_id: number, price: number) {
     const result = await this.sql.begin(async () => {
       const existUser = await this
-        .sql`SELECT id FROM users WHERE id = ${user_id}`;
+        .sql`SELECT id FROM users WHERE id = ${user_id} for update`; // LOCK OR WAIT OTHER TRANSACTIONS
       if (!existUser) throw new Error('User not found');
 
       const [{ total_balance }] = await this

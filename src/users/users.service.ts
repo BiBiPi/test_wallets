@@ -19,6 +19,10 @@ export class UsersService {
 
   async deposit(user_id: number, amount: number) {
     return await this.sql.begin(async () => {
+      const existUser = await this
+        .sql`SELECT id FROM users WHERE id = ${user_id} for update`; // LOCK OR WAIT OTHER TRANSACTIONS
+      if (!existUser) throw new Error('User not found');
+
       await this
         .sql`INSERT INTO transactions(user_id, action, amount, ts) VALUES (${user_id}, 'UP', ${amount}, NOW())`;
 
