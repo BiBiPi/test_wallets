@@ -14,7 +14,7 @@ import { createClient } from 'redis';
       provide: 'SQL',
       useFactory: () =>
         postgres(
-          process.env.PG_CONNECTION ??
+          process.env.PG_URL ??
             `postgres://root:root@localhost:5432/test`,
         ),
     },
@@ -22,7 +22,7 @@ import { createClient } from 'redis';
       provide: 'REDIS',
       useFactory: async () => {
         const client = createClient({
-          url: 'redis://localhost:6379',
+          url: process.env.REDIS_URL ?? 'redis://localhost:6379',
         });
 
         client.on('error', (err) => console.log('Redis Client Error', err));
