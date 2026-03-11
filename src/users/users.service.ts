@@ -1,9 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
 import postgres from 'postgres';
+import { RedisClientType } from 'redis';
 
 @Injectable()
 export class UsersService {
-  constructor(@Inject('SQL') private readonly sql: postgres.Sql) {}
+  constructor(
+    @Inject('SQL') private readonly sql: postgres.Sql,
+    @Inject('REDIS') private readonly resis: RedisClientType,
+  ) {}
 
   async getAll() {
     return await this.sql`SELECT * FROM users`;

@@ -4,6 +4,7 @@ import { UsersService } from './users/users.service';
 import { TransactionsService } from './transactions/transactions.service';
 import { TransactionsController } from './transactions/transactions.controller';
 import postgres from 'postgres';
+import { createClient } from 'redis';
 
 @Module({
   imports: [],
@@ -11,9 +12,24 @@ import postgres from 'postgres';
   providers: [
     {
       provide: 'SQL',
-      useValue: postgres(
-        process.env.PG_CONNECTION ?? `postgres://root:root@localhost:5432/test`,
-      ),
+      useFactory: () =>
+        postgres(
+          process.env.PG_CONNECTION ??
+            `postgres://root:root@localhost:5432/test`,
+        ),
+    },
+    {
+      provide: 'REDIS',
+      useFactory: async () => {
+        const client = createClient({
+          url: 'redis://localhost:6379',
+        });
+
+        client.on('error', (err) => console.log('Redis Client Error', err));
+        await client.connect();
+
+        return client;
+      },
     },
     UsersService,
     TransactionsService,

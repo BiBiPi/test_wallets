@@ -5,10 +5,14 @@
 
 В кэш кладу старые данные по транзакциям, чтобы не задействовать всю таблицу для подчета баланса, а только часть.
 
-#### Запуск базы в докере: 
+#### Запуск баз в докере: 
 
 ```bash 
 docker run --name test1 -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=root -e POSTGRES_DB=test -d postgres:17`
+```
+
+```bash 
+docker run -d --name some-redis -p 6379:6379 redis
 ```
 
 #### Описание таблиц:
