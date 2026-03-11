@@ -5,6 +5,7 @@ import { TransactionsService } from './transactions/transactions.service';
 import { TransactionsController } from './transactions/transactions.controller';
 import postgres from 'postgres';
 import { createClient } from 'redis';
+import { DateTime } from 'luxon';
 
 @Module({
   imports: [],
@@ -20,6 +21,7 @@ import { createClient } from 'redis';
     {
       provide: 'REDIS',
       useFactory: async () => {
+        console.log(+DateTime.now().plus({ day: 1 }).startOf('day'));
         const client = createClient({
           url: process.env.REDIS_URL ?? 'redis://localhost:6379',
         });

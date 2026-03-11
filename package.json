@@ -23,6 +23,7 @@
     "@nestjs/common": "^10.0.0",
     "@nestjs/core": "^10.0.0",
     "@nestjs/platform-express": "^10.0.0",
+    "luxon": "^3.7.2",
     "postgres": "^3.4.8",
     "redis": "^5.11.0",
     "reflect-metadata": "^0.1.13",
