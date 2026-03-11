@@ -14,8 +14,7 @@ import { createClient } from 'redis';
       provide: 'SQL',
       useFactory: () =>
         postgres(
-          process.env.PG_URL ??
-            `postgres://root:root@localhost:5432/test`,
+          process.env.PG_URL ?? `postgres://root:root@localhost:5432/test`,
         ),
     },
     {
