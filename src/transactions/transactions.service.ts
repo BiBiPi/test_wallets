@@ -19,7 +19,6 @@ export class TransactionsService {
       const [user] = await this
         .sql`SELECT id FROM users WHERE id = ${user_id} for update`; // LOCK OR WAIT OTHER TRANSACTIONS
 
-      console.log(user);
       if (!user)
         throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
 
