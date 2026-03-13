@@ -20,15 +20,15 @@ export class TransactionsService {
         .sql`SELECT id as exist_user FROM users WHERE id = ${user_id} for update`; // LOCK OR WAIT OTHER TRANSACTIONS
       if (!exist_user) throw new Error('User not found');
 
-      let oldSum = (await this.resis.get(`user:${exist_user}`)) ?? 0;
+      let oldSum = await this.resis.get(`user:${exist_user}`)
 
       if (!oldSum) {
         const [{ total_balance }] = await this
           .sql`SELECT SUM(amount) as total_balance FROM transactions WHERE user_id = ${user_id} and ts::date < NOW()::date`;
 
-        oldSum = total_balance;
+        oldSum = total_balance ?? 0;
 
-        await this.resis.set(`user:${exist_user}`, total_balance, {
+        await this.resis.set(`user:${exist_user}`, total_balance ?? 0, {
           EXAT: +DateTime.now().plus({ day: 1 }).startOf('day') / 1000,
         });
       }

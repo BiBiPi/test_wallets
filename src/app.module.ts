@@ -21,7 +21,6 @@ import { DateTime } from 'luxon';
     {
       provide: 'REDIS',
       useFactory: async () => {
-        console.log(+DateTime.now().plus({ day: 1 }).startOf('day'));
         const client = createClient({
           url: process.env.REDIS_URL ?? 'redis://localhost:6379',
         });
