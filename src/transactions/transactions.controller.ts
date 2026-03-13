@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
+import { BuyDTO } from './dto/buy.dto';
 
 @Controller('transactions')
 export class TransactionsController {
@@ -11,9 +12,7 @@ export class TransactionsController {
   }
 
   @Post('buy')
-  buy(@Body() buy: { user_id: number; price: number }) {
-    const { user_id, price } = buy;
-
-    return this.transactionsService.buy(user_id, price);
+  buy(@Body() buy: BuyDTO) {
+    return this.transactionsService.buy(buy.user_id, buy.price);
   }
 }

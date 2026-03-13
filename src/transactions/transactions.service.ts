@@ -20,7 +20,7 @@ export class TransactionsService {
         .sql`SELECT id as exist_user FROM users WHERE id = ${user_id} for update`; // LOCK OR WAIT OTHER TRANSACTIONS
       if (!exist_user) throw new Error('User not found');
 
-      let oldSum = await this.resis.get(`user:${exist_user}`)
+      let oldSum = await this.resis.get(`user:${exist_user}`);
 
       if (!oldSum) {
         const [{ total_balance }] = await this

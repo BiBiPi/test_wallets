@@ -5,8 +5,12 @@ import {
   Get,
   Patch,
   Put,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
+import { Validate } from 'class-validator';
+import { DepostitDTO } from './dto/deposti.dto';
 
 @Controller('users')
 export class UsersController {
@@ -23,11 +27,7 @@ export class UsersController {
   }
 
   @Patch('deposit')
-  deposit(@Body() deposit: { user_id: number; amount: number }) {
-    if (deposit.amount <= 0)
-      throw new BadRequestException('Amount must be upper 0');
-
-    const { user_id, amount } = deposit;
-    return this.usersService.deposit(user_id, amount);
+  deposit(@Body() deposit: DepostitDTO) {
+    return this.usersService.deposit(deposit.user_id, deposit.amount);
   }
 }
